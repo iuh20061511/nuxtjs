@@ -1,0 +1,65 @@
+// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
+//
+// The variables you want to modify
+// $font-size-root: 20px;
+// assets/styles/variables.scss
+
+// Màu sắc chính
+$primary: #1976D2; // Màu chính
+$secondary: #424242; // Màu phụ
+$accent: #82B1FF; // Màu nhấn
+$error: #FF5252; // Màu lỗi
+$info: #2196F3; // Màu thông tin
+$success: #4CAF50; // Màu thành công
+$warning: #FFC107; // Màu cảnh báo
+
+// Màu nền
+$background: #FFFFFF; // Màu nền chính
+$surface: #F5F5F5; // Màu bề mặt
+$on-background: #000000; // Màu chữ trên nền
+$on-surface: #000000; // Màu chữ trên bề mặt
+
+// Kích thước
+$border-radius: 4px; // Độ bo góc
+$padding: 16px; // Padding mặc định
+$margin: 16px; // Margin mặc định
+
+// Typography
+$font-family: 'Roboto', sans-serif; // Font chữ chính
+$font-size-base: 16px; // Kích thước chữ cơ bản
+$font-size-lg: 20px; // Kích thước chữ lớn
+$font-size-sm: 14px; // Kích thước chữ nhỏ
+$line-height: 1.5; // Chiều cao dòng
+
+// Tùy chỉnh theme Vuetify
+$material-light: (
+  primary: $primary,
+  secondary: $secondary,
+  accent: $accent,
+  error: $error,
+  info: $info,
+  success: $success,
+  warning: $warning,
+  background: $background,
+  surface: $surface,
+  on-background: $on-background,
+  on-surface: $on-surface,
+);
+
+// Tùy chỉnh các biến màu sắc cho dark theme
+$material-dark: (
+  primary: $primary,
+  secondary: $secondary,
+  accent: $accent,
+  error: $error,
+  info: $info,
+  success: $success,
+  warning: $warning,
+  background: #121212, // Màu nền tối
+  surface: #1E1E1E, // Bề mặt tối
+  on-background: #FFFFFF, // Màu chữ trên nền tối
+  on-surface: #FFFFFF, // Màu chữ trên bề mặt tối
+);
+
+// Import các style mặc định của Vuetify
+@import '~vuetify/src/styles/styles.sass';
