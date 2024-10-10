@@ -56,7 +56,9 @@ export default {
     },
     fetchProduct() {
       axios
-        .get(`http://127.0.0.1:8000/api/products/${this.productId}`)
+        .get(`http://127.0.0.1:8000/api/products/${this.productId}`,{
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+          })
         .then(response => {
           this.product = response.data || {};
           console.log(this.product);

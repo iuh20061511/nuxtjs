@@ -1,10 +1,13 @@
-# STORE
+State:
 
-**This directory is not required, you can delete it if you don't want to use it.**
+products: Danh sách các sản phẩm ban đầu là một mảng rỗng.
+Mutations:
 
-This directory contains your Vuex Store files.
-Vuex Store option is implemented in the Nuxt.js framework.
+setProducts: Cập nhật danh sách sản phẩm vào state khi nhận được từ API.
+Getters:
 
-Creating a file in this directory automatically activates the option in the framework.
+allProducts: Trả về toàn bộ danh sách sản phẩm từ state.
+Actions:
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/vuex-store).
+fetchProducts: Lấy danh sách sản phẩm từ API và cập nhật vào state thông qua mutation setProducts.
+Nếu bạn cần mình bổ sung hoặc ti

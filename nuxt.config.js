@@ -43,7 +43,12 @@ export default {
   modules: [
     '@nuxtjs/vuetify',
     '@nuxtjs/axios',
+    "@nuxtjs/auth-next"
   ],
+  axios: {
+    baseURL: 'http://localhost:8000', // Địa chỉ Laravel backend
+    credentials: true,
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -68,4 +73,22 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
+  ,router: {
+    middleware: ['auth']
+  },
+ssr:false,
+auth: {
+    strategies: {
+      laravelSanctum: {
+        provider: "laravel/sanctum",
+        url: "http://localhost:8000",
+        endpoints: {
+          login: { url: "/api/login" },
+          logout: { url: "/api/logout" }
+        }
+      }
+    }
+  },
+
+
 }

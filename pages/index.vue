@@ -4,11 +4,11 @@
       <v-col cols="12" md="6" lg="3" xl="3" v-for="(product, index) in data" :key="index" class="mb-1">
         <v-card class="h-100">
           <!-- Product image-->
-          <v-img :src=" getFullImageUrl(product.image)" alt="Product Image" height="200"></v-img>
+          <v-img :src="getFullImageUrl(product.image)" alt="Product Image" height="200"></v-img>
           <!-- Product details-->
           <v-card-title class="text-center">{{ product.name }}</v-card-title>
           <v-card-subtitle class="text-center">
-            {{  formatPrice(product.price) }}
+            {{ formatPrice(product.price) }}
           </v-card-subtitle>
           <v-card-actions class="justify-center">
             <v-btn outlined color="primary" @click="viewProductOptions(product)">View options</v-btn>
@@ -29,11 +29,12 @@ export default {
   },
   async mounted() {
     try {
-      const response = await this.$axios.$get('http://127.0.0.1:8000/api/products'); // Thay đổi endpoint này
+      const response = await this.$axios.$get('http://127.0.0.1:8000/api/products', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
       this.data = response.data;
-      console.log(this.data);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching products:", error);
     }
   },
   methods: {
@@ -43,9 +44,13 @@ export default {
     getFullImageUrl(imagePath) {
       return `http://127.0.0.1:8000/storage/${imagePath}`;
     },
+    viewProductOptions(product) {
+      console.log(`Viewing options for ${product.name}`);
+    },
+    addToCart(product) {
+      console.log(`Added ${product.name} to cart`);
+    }
   }
 };
-</script>
-<style>
 
-</style>
+</script>

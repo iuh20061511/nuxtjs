@@ -12,24 +12,24 @@
       <v-col cols="12">
         <v-data-table
           :headers="headers"
-          :items="users"
+          :items="products"
           item-key="id"
           class="elevation-1 table"
         >
           <template v-slot:body="{ items }">
             <tbody>
-              <tr v-for="(user, index) in items" :key="index">
+              <tr v-for="(product, index) in items" :key="index">
                 <td>{{ ++index }}</td>
                 <td>
-                  <img :src="getFullImageUrl(user.image)" alt="Image" class="p-2" style="width: 60px; height: auto"/>
+                  <img :src="getFullImageUrl(product.image)" alt="Image" class="p-2" style="width: 60px; height: auto"/>
                 </td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.price | currency }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price | currency }}</td>
                 <td>
                   <div class="d-flex ">
-                    <edit-product class="m-1" :product-id="user.id"></edit-product>
-                    <v-btn class="m-1" @click="deleteUser(user.id)" color="red" small>Delete</v-btn>
-                    <detail-product class="m-1" :product-id="user.id"></detail-product>
+                    <edit-product class="m-1" :product-id="product.id"></edit-product>
+                    <v-btn class="m-1" @click="deleteproduct(product.id)" color="red" small>Delete</v-btn>
+                    <detail-product class="m-1" :product-id="product.id"></detail-product>
                 </div>
                 </td>
               </tr>
@@ -55,7 +55,7 @@ import EditProduct from '../../components/Products/EditProduct.vue';
     },
     data() {
       return {
-        users: [],
+        products: [],
         headers: [
           { text: 'ID', value: 'id' },
           { text: 'image', value: 'image' },
@@ -66,18 +66,19 @@ import EditProduct from '../../components/Products/EditProduct.vue';
       };
     },
     mounted() {
-      this.fetchUsers();
+      this.ftechProduct();
     },
     methods: {
       getFullImageUrl(imagePath) {
       return `http://127.0.0.1:8000/storage/${imagePath}`;
     },
-      fetchUsers() {
-        axios
-          .get('http://127.0.0.1:8000/api/products')
+    ftechProduct() {
+        axios.get('http://127.0.0.1:8000/api/products', {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+          })
           .then(response => {
-            this.users = response.data.data|| [];
-            console.log(this.users)
+            this.products = response.data.data || [];
+            console.log(this.products);
           })
           .catch(error => {
             console.error('Error fetching users:', error);
