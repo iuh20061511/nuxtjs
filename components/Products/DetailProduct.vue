@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-btn @click="dialog = true" color="success" small>View</v-btn>
-    
+
     <v-dialog v-model="dialog" max-width="600px">
       <template v-slot:default>
         <v-card>
@@ -10,14 +10,17 @@
           </v-card-title>
           <v-card-text>
             <div class="product-info d-flex">
-              <div class="product-image">
-                <img :src="getFullImageUrl(product.image)" alt="Image" class="img-fluid rounded" />
+              <div class="col-5 product-image">
+                <img
+                  :src="getFullImageUrl(product.image)"
+                  alt="Image"
+                  class="img-fluid rounded"
+                />
               </div>
-              <div class="product-details ms-3">
-              <p><strong>Giá: </strong> {{ product.price | currency }}</p>
-              <p><strong>Mô tả: </strong></p>
-              <p>{{ product.description }}</p>
-            
+              <div class="col-7 product-details ms-3">
+                <p><strong>Giá: </strong> {{ product.price | currency }}</p>
+                <p><strong>Mô tả: </strong></p>
+                <p>{{ product.description }}</p>
               </div>
             </div>
           </v-card-text>
@@ -27,18 +30,18 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
       dialog: false,
       product: {
-        name: '',
-        description: '',
-        price: '',
-        image: null 
-      }
+        name: "",
+        description: "",
+        price: "",
+        image: null,
+      },
     };
   },
   props: {
@@ -56,24 +59,24 @@ export default {
     },
     fetchProduct() {
       axios
-        .get(`http://127.0.0.1:8000/api/products/${this.productId}`,{
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-          })
-        .then(response => {
+        .get(`http://127.0.0.1:8000/api/products/${this.productId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        })
+        .then((response) => {
           this.product = response.data || {};
           console.log(this.product);
         })
-        .catch(error => {
-          console.error('Error fetching product:', error);
+        .catch((error) => {
+          console.error("Error fetching product:", error);
         });
     },
   },
   filters: {
     currency(value) {
-      if (!value) return '';
-      return new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
+      if (!value) return "";
+      return new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
       }).format(value);
     },
   },

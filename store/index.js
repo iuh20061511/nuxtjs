@@ -1,66 +1,97 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import axios from 'axios';
+import axios from "axios";
+import Vue from "vue";
+import Vuex from "vuex";
 
 Vue.use(Vuex);
 
 export const state = () => ({
-  products: [], // Danh sách sản phẩm
-  userInfo: null, // Thông tin người dùng
+  products: [],
+  productDetail: null,
 });
 
-export const mutations = {
-  setProducts(state, products) {
-    state.products = products; // Cập nhật danh sách sản phẩm
+export const actions = {
+  async getProducts({ commit }) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://127.0.0.1:8000/api/products", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      commit("SET_PRODUCTS", response.data.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   },
-  setUserInfo(state, userInfo) {
-    state.userInfo = userInfo; // Cập nhật thông tin người dùng
+
+  async getProductDetail({ commit }, productId) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/products/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      commit("SET_PRODUCT_DETAIL", response.data.data);
+    } catch (error) {
+      console.error("Error fetching product detail:", error);
+    }
+  },
+
+  async addProduct({ commit }, newProduct) {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      const formData = new FormData();
+      formData.append("name", newProduct.name);
+      formData.append("description", newProduct.description);
+      formData.append("price", newProduct.price);
+      formData.append("image", newProduct.image);
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/products",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+
+      commit("ADD_PRODUCT", response.data.data);
+      return response;
+    } catch (error) {
+      console.error("Error while adding product:", error.response ? error.response.data : error.message);
+      throw error;
+    }
+  },
+
+  add({ commit }, newProduct) {
+    commit("ADD_PRODUCT", newProduct);
+  }
+};
+
+export const mutations = {
+  SET_PRODUCTS(state, products) {
+    state.products = products;
+  },
+  SET_PRODUCT_DETAIL(state, productDetail) {
+    state.productDetail = productDetail;
+  },
+  ADD_PRODUCT(state, newProduct) {
+    state.products.unshift(newProduct);
   },
 };
 
 export const getters = {
-  allProducts(state) {
-    return state.products; // Trả về toàn bộ danh sách sản phẩm
-  },
-  userInfo(state) {
-    return state.userInfo; // Trả về thông tin người dùng
-  },
-};
-
-export const actions = {
-  async fetchProducts({ commit }) {
-    try {
-      const response = await axios.get('http://127.0.0.1:8000/api/products', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      commit('setProducts', response.data.data); // Cập nhật danh sách sản phẩm
-    } catch (error) {
-      console.error('Lỗi khi lấy danh sách sản phẩm:', error);
-    }
-  },
-
-  async addProduct({ dispatch }, product) {
-    const formData = new FormData();
-    formData.append('name', product.name);
-    formData.append('description', product.description);
-    formData.append('price', product.price);
-    if (product.image) {
-      formData.append('image', product.image);
-    }
-
-    try {
-      await axios.post('http://127.0.0.1:8000/api/products', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      await dispatch('fetchProducts'); // Cập nhật lại danh sách sản phẩm sau khi thêm
-    } catch (error) {
-      console.error('Có lỗi xảy ra khi thêm sản phẩm:', error);
-      throw error; // Đẩy lỗi lên để xử lý ở component
-    }
-  },
+  getProducts: (state) => state.products,
+  getProductDetail: (state) => state.productDetail,
 };
